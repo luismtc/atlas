@@ -1,0 +1,13 @@
+body {
+	background-color: #ecf0f5;
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+}
+
+.form-control-mono {
+	font-family: 'Roboto Mono', monospace !important;
+}
+
+.semana-actual {
+	background-color: rgba(0, 139, 139, 0.22);
+}

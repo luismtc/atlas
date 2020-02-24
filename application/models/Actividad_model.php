@@ -134,6 +134,8 @@ class Actividad_model extends Especifico_model {
 						a.user_picture,
 						a.responde,
 						b.descripcion as naccion, 
+						c.nombre,
+						c.apellidos,
 						c.usuario as nalias")
 					->from("atlas.bitacora a")
 					->join("atlas.accion b", "b.id = a.accion_id")

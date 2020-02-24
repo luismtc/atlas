@@ -5,20 +5,16 @@ var appProyecto = new Vue({
       titulo: null,
       pendientes: true
     },
-    filtro: {
-      nombre: '',
-      responsable: 'todos'
-    },
-    responsables: [],
-    listaProductos: null,
+    bform: {pendiente:true},
+    listaProductos: [],
     proyecto: null,
-    listaPendientes: [],
+    actividades: [],
     pMensaje: '',
-    actual: null,
+    actual: 2,
     anterior: null,
+    expandir: false,
     menu: [
-      {valor:1, titulo:'Filtrar proyectos pendientes', icono: 'fa fa-filter', href: false},
-      {valor:0, titulo:'Buscar proyecto', icono: 'fa fa-search', href: false},
+      {valor:1, titulo:'Buscar proyecto', icono: 'fa fa-search', href: false},
       {valor:4, titulo:'Crear proyecto', icono: 'fa fa fa-plus', href: false},
       {valor:2, titulo:'Mis pendientes', icono: 'fa fa-tasks', href: false},
       {valor:5, titulo:'Indicadores', icono: 'fa fa-chart-bar', href: false},
@@ -35,8 +31,6 @@ var appProyecto = new Vue({
       this.buscarProyecto();
     },
   	buscarProyecto: function() {
-      this.actual = 1;
-
       axios
       .get(urlBase+'proyecto/buscar', {params: this.form})
       .then(response => {
@@ -48,27 +42,16 @@ var appProyecto = new Vue({
       this.proyecto = item;
     },
     verPendientes: function() {
+      this.actividades = [];
       this.pMensaje = 'Cargando...';
-      this.actual = 2;
       
       axios
-      .get(urlBase+'actividad/pendiente')
+      .get(urlBase+'actividad/pendiente', {params:this.bform})
       .then(r => {
-        this.listaPendientes = r.data;
+        this.actividades = r.data;
         
-        if (this.listaPendientes.length ==  0) {
+        if (this.actividades.length ==  0) {
           this.pMensaje = 'Sin pendientes.';
-        } else {
-          for (var i = this.listaPendientes.length - 1; i >= 0; i--) {
-            let tmp = {
-              id: this.listaPendientes[i].responsable,
-              nombre: this.listaPendientes[i].nresponsable
-            }
-
-            if (this.responsables.filter(o => { return o.id === tmp.id }).length === 0) {
-              this.responsables.push(tmp);
-            }
-          }
         }
       });
     },
@@ -76,34 +59,16 @@ var appProyecto = new Vue({
       this.actual = this.anterior;
     }
   },
-  created: function() {
-    this.verPendientes();
-  },
-  computed: {
-    pendientes: function() {
-      return this.listaPendientes.filter(o => {
-        let n = o.titulo.toLowerCase().includes(this.filtro.nombre.toLowerCase());
-        let r = (this.filtro.responsable === 'todos' || o.responsable == this.filtro.responsable);
-
-        return (n && r);
-      })
-    }
-  },
   components: {
     'ver-proyecto': appVerProyecto,
     'form-proyecto': appFormProyecto,
-    'pendiente': appActividadLista,
-    'indicador': indicador
+    'actividad-item': appActividadLista,
+    'indicador': indicador,
+    'filtro-actividades': listaActividades
   },
   watch: {
     actual: function(valor, anterior) {
       this.anterior = anterior;
-      
-      if (valor == 1 && anterior != 0) {
-        this.verProyectoPendiente();
-      } else if (valor == 2) {
-        this.verPendientes();
-      }
     }
   }
 });

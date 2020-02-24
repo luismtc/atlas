@@ -3,7 +3,7 @@
 	<actividad-form :act="act" v-if="formActividad"></actividad-form>
 	<div class="row">
 		<div class="col-sm-7">
-			<strong>{{ act.nresponsable }}</strong> 
+			<strong>{{ act.nombre }} {{ act.apellidos }}</strong> 
 			<small class="text-muted">{{ act.compromiso }}</small>
 			<span 
 				class="font-weight-bold"
@@ -26,13 +26,21 @@
 			</a>
 		</div>
 	</div>
-	<div v-html="act.descripcion"></div>
+	<div>
+		<p class="mb-0"><strong>{{ act.subtitulo }}</strong>:</p>
+		<p v-html="act.descripcion"></p>	
+	</div>
 	<div v-if="detalle == true">
 		<a 
 			href="javascript:;" 
 			style="color: #0972e3;" 
 			title="Título del proyecto" 
 			@click.prevent="getProyecto">{{ act.titulo }}</a>
+		<small title="Específico">{{ act.nespecifico }}</small>
+	</div>
+	<div v-else>
+		<small title="Título del proyecto">{{ act.titulo }}</small> 
+		<span class="fa fa-arrow-right"></span> 
 		<small title="Específico">{{ act.nespecifico }}</small>
 	</div>
 	<div>
@@ -91,7 +99,7 @@
   <img class="mr-3" :src="com.user_picture" alt="User Image" style="height: 38px;">
   <div class="media-body">
     <p class="m-0">
-    	{{ com.nalias }} 
+    	{{ com.nombre }} {{ com.apellidos }}
     	<span class="text-muted">
     		<a href="#" @click.prevent="$emit('comentar', com.id)">Responder</a>
     	</span>

@@ -14,6 +14,12 @@
             @click="formEspecifico = !formEspecifico">
             <i class="fa fa-plus"></i> Específico
           </button>
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            @click="expandir = !expandir">
+            <i class="fa fa-expand-alt"></i> Expandir
+          </button>
         </div>
       </div>
       <div class="col-sm-6 text-right">
@@ -21,7 +27,7 @@
       </div>
     </div>
     <div class="row mt-2">
-      <div class="col-sm-4">
+      <div class="col-sm-4" v-if="!expandir">
         <ul class="list-group">
           <li class="list-group-item" v-if="formEspecifico">
             <div class="form-group">
@@ -41,6 +47,14 @@
           >
             Descripción
           </a>
+          <a
+            href="#"
+            class="list-group-item list-group-item-action"
+            :class="['list-group-item', 'list-group-item-action', {active: opcion == 3}]"
+            @click="getPendientes"
+          >
+            Pendientes
+          </a>
           <a 
             href="javascript:;"
             v-for="(i, index) in listaEspecificos"
@@ -51,13 +65,16 @@
           </a>
         </ul>
       </div>
-      <div class="col-sm-8">
+      <div :class="ancho">
         <div class="card" v-if="opcion == 1">
           <div class="card-body" v-html="proyecto.descripcion"></div>
         </div>
         <div v-if="opcion == 2">
           <especifico-ver :esp="actualEspecifico"><especifico-ver>
         </div>
+        <template v-if="opcion == 3 && actividades.length > 0">
+          <filtro-actividades :actividades="actividades" :detalle="false"></filtro-actividades>
+        </template>
       </div>
     </div>
   </div>

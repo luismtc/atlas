@@ -41,10 +41,9 @@ class Actividad extends CI_Controller {
 
 	public function pendiente()
 	{
-		$pendiente = $this->Abuscar_model->getActividad([
-			"pendiente" => true,
-			"responsable" => $this->session->atlas_user["id"]
-		]);
+		$_GET["responsable"] = $this->session->atlas_user["id"];
+
+		$pendiente = $this->Abuscar_model->getActividad($_GET);
 
 		$this->output
 		->set_content_type("application/json")

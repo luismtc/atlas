@@ -20,6 +20,13 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		echo password_hash("abc123**", PASSWORD_DEFAULT)."\n";
+		// echo password_hash("abc123**", PASSWORD_DEFAULT)."\n";
+		$metodo = "mifuncion";
+		$this->$metodo('saludos');
+	}
+
+	public function mifuncion($s)
+	{
+		echo "Hola " . $s;
 	}
 }

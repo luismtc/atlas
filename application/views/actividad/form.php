@@ -1,9 +1,24 @@
 <template id="form-actividad">
 <div>
-  <div class="row mb-2" v-if="form.descripcion !== null">
-    <div class="offset-sm-2 col-sm-10" v-html="form.descripcion"></div>
+  <div class="row mb-2" v-if="previa">
+    <div class="offset-sm-2 col-sm-10">
+      <button 
+        type="button" 
+        class="btn btn-sm btn-secondary" 
+        @click="previa = !previa"
+      >
+        <i class="fa fa-arrow-left"></i> Cancelar
+      </button>
+      <div v-html="form.descripcion"></div>
+    </div>
   </div>
-  <form autocomplete="off" @submit.prevent="guardarActividad">
+  <form autocomplete="off" @submit.prevent="guardarActividad" v-if="!previa">
+    <div class="form-group row mb-1">
+      <label for="inputActividadSubTitulo" class="col-sm-2 col-form-label">Subtítulo:</label>
+      <div class="col-sm-10">
+        <input type="text" v-model="form.subtitulo" class="form-control form-control-sm" id="inputActividadSubTitulo">
+      </div>
+    </div>
     <div class="form-group row mb-1">
       <label for="selectResponsableActividad" class="col-sm-2 col-form-label">Responsable</label>
       <div class="col-sm-10">
@@ -41,8 +56,11 @@
         </div>
       </div>
       <div class="col-sm-6 text-right">
+        <button type="button" class="btn btn-sm btn-secondary" @click="previa = !previa">
+          <i class="fa fa-refresh"></i> Previa
+        </button>
         <button type="reset" class="btn btn-sm btn-secondary" @click="$parent.formActividad = false">
-        <i class="fa fa-refresh"></i> Cancelar
+          <i class="fa fa-refresh"></i> Cancelar
         </button>
         <button type="submit" class="btn btn-sm btn-info" :disabled="btnGuardar">
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-if="btnGuardar"></span>

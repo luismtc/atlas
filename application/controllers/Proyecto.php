@@ -74,19 +74,14 @@ class Proyecto extends CI_Controller {
 			 ->set_output(json_encode($data));
 	}
 
-	public function actividad()
+	public function get_actividad($producto)
 	{
-		$data = [];
-
-		if ($this->input->get('especifico')) {
-			$pro = new Especifico_model();
-			$pro->setEspecifico($_GET["especifico"], true);
-			$data["actividades"] = $pro->getActividades();
-		}
+		$pro = new Producto_model();
+		$pro->setProducto($producto, true);
 
 		$this->output
 		->set_content_type("application/json")
-		->set_output(json_encode($data));
+		->set_output(json_encode($pro->getActividadesProducto($_GET)));
 	}
 }
 
