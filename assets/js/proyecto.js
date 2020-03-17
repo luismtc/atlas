@@ -59,6 +59,9 @@ var appProyecto = new Vue({
       this.actual = this.anterior;
     }
   },
+  created () {
+    this.verPendientes();
+  },
   components: {
     'ver-proyecto': appVerProyecto,
     'form-proyecto': appFormProyecto,

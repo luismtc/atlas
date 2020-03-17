@@ -11,3 +11,13 @@ body {
 .semana-actual {
 	background-color: rgba(0, 139, 139, 0.22);
 }
+
+@media print {
+	.table td, .table th {
+      background-color: transparent !important;
+    }
+
+    .cronograma {
+        background-color: #000000 !important;
+    }
+}

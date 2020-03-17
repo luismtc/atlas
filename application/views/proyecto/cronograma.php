@@ -1,6 +1,6 @@
 <template id="tabla-cronograma">
 <div class="table-responsive">
-	<table class="table table table-sm">
+	<table class="table table-sm">
 		<thead class="thead-dark">
 			<tr>
 				<th scope="col" colspan="4"></th>
@@ -40,7 +40,7 @@
 					<template v-for="d in diasSemana">
 						<td 
 							v-if="i.semana == s && d.numero == i.dia"
-							:class="(i.entrega == null ? 'bg-warning' : (i.cumple == 1 ? 'bg-success' : 'bg-danger'))"
+							:class="[(i.entrega == null ? 'bg-warning' : (i.cumple == 1 ? 'bg-success' : 'bg-danger')), 'cronograma']"
 						></td>
 						<td :class="{'semana-actual': (i.semana_actual == s)}" v-else></td>
 					</template>

@@ -1,4 +1,4 @@
-<div class="card mb-2" v-if="actual == 2">
+<div class="card mb-2 d-print-none" v-if="actual == 2">
   <div class="card-body px-2 py-2">
     <form @submit.prevent="verPendientes">
       <div class="input-group input-group-sm">
@@ -51,5 +51,9 @@
 </div>
 
 <template v-if="actual == 2 && actividades.length > 0">
-  <filtro-actividades :actividades="actividades" :detalle="true"></filtro-actividades>
+  <filtro-actividades 
+    :actividades="actividades" 
+    :detalle="true"
+    v-on:proyecto="verProyecto"
+  ></filtro-actividades>
 </template>

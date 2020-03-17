@@ -23,6 +23,11 @@ let listaActividades = {
       bform: {}
     }
   },
+  methods: {
+    proyecto (item) {
+      this.$emit('proyecto', item);
+    }
+  },
   computed: {
     lista: function() {
       return this.actividades.filter(o => {

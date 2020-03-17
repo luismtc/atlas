@@ -37,7 +37,6 @@ Vue.component('cronograma-lista', {
 		ver (idx) {
 			this.tmpActual = this.actividades[idx];
 			this.showMdl = true;
-			console.log(this.tmpActual)
 		}
 	}
 })

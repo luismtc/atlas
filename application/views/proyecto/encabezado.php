@@ -1,4 +1,4 @@
-<header>
+<header class="d-print-none">
   <ul class="nav justify-content-center mt-2">
     <li class="nav-item ml-2 mr-2" v-for="(i, index) in menu" :index="index" :key="i.valor">
       <button 

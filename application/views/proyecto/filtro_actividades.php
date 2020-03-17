@@ -1,7 +1,7 @@
 <template id="filtro-actividades">
   <div class="card">
     <ul class="list-group list-group-flush">
-      <li class="list-group-item">
+      <li class="list-group-item d-print-none">
         <div class="input-group input-group-sm">
           <select 
             class="form-control" 
@@ -28,8 +28,7 @@
           class="form-control"
           v-model="filtro.nombre"
           placeholder="Nombre del proyecto"
-          aria-label="Nombre del proyecto"
-          aria-describedby="btn-buscar">
+          aria-label="Nombre del proyecto">
           <div class="input-group-append">
             <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Vista</button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1">
@@ -45,6 +44,7 @@
           :act="i"
           :detalle="detalle"
           :key="i.actividad"
+          v-on:proyecto="proyecto"
           :index="index">
         </actividad-item>
       </template>
