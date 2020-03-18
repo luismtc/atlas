@@ -93,10 +93,10 @@ class Actividad_model extends Especifico_model {
 
 		$tmp = $this->db->affected_rows() > 0;
 
-		/*if ($tmp) {
+		if ($tmp) {
 			if ($args["datos"]["accion_id"] == 1) {
 
-				if ($this->session->atlas_user["id"] != $this->actividad->responsable) {
+				/*if ($this->session->atlas_user["id"] != $this->actividad->responsable) {
 					$para = $this->getActividadResponsable()->mail;
 				} else if ($this->session->atlas_user["id"] != $this->producto->responsable) {
 					$para = $this->getProductoResponsable()->mail;
@@ -118,8 +118,31 @@ class Actividad_model extends Especifico_model {
 						"comentario" => $args["datos"]["comentario"]
 					], true)
 				]);
+				*/
+
+				$usu = $this->conf->get_usuario([
+					"uno" => true,
+					"usuario" => $this->session->atlas_user["id"]
+				]);
+
+				$hookSala = "https://chat.googleapis.com/v1/spaces/AAAA0Ldq-OM/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=BMxW4XESQfGIy05fAJS0zyQMVFL-TvoMZWDVDpGTMF8%3D";
+				$txt = ["text" => "
+					{$usu->nombre} {$usu->apellidos} ha comentado: \n
+					{$this->producto->titulo} > 
+					{$this->especifico->descripcion} > 
+					{$this->actividad->subtitulo}: \n
+				" . $args["datos"]["comentario"]];
+				
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $hookSala);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_POST, 1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($txt)); 
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/plain')); 
+				curl_exec($ch);
+				curl_close($ch);
 			}
-		}*/
+		}
 
 		return $tmp;
 	}
