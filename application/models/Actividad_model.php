@@ -120,18 +120,13 @@ class Actividad_model extends Especifico_model {
 				]);
 				*/
 
-				$usu = $this->conf->get_usuario([
+				$usu = $this->conf->getUsuario([
 					"uno" => true,
-					"usuario" => $this->session->atlas_user["id"]
+					"id" => $this->session->atlas_user["id"]
 				]);
 
 				$hookSala = "https://chat.googleapis.com/v1/spaces/AAAA0Ldq-OM/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=BMxW4XESQfGIy05fAJS0zyQMVFL-TvoMZWDVDpGTMF8%3D";
-				$txt = ["text" => "
-					{$usu->nombre} {$usu->apellidos} ha comentado: \n
-					{$this->producto->titulo} > 
-					{$this->especifico->descripcion} > 
-					{$this->actividad->subtitulo}: \n
-				" . $args["datos"]["comentario"]];
+				$txt = ["text" => "{$usu->nombre} ha comentado: {$this->producto->titulo} > {$this->especifico->descripcion} > {$this->actividad->subtitulo}:\n" . $args["datos"]["comentario"]];
 				
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $hookSala);
