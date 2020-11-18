@@ -45,6 +45,8 @@ class Abuscar_model extends CI_Model {
 			$this->db->limit(1);
 		}
 
+		$userID = $this->session->atlas_user["id"];
+
 		$tmp = $this->db
 					->select("
 						a.fecha, 
@@ -58,6 +60,8 @@ class Abuscar_model extends CI_Model {
 						if(date(a.entrega) <= a.compromiso, 1, 0) as cumple, 
 						a.actividad,
 						a.responsable,
+						a.retorno,
+						a.cerrada,
 						dayofweek(a.compromiso) as dia,
 						(week(a.compromiso)+1) as semana,
 						(week(curdate())+1) as semana_actual,
@@ -68,7 +72,9 @@ class Abuscar_model extends CI_Model {
 						d.nombre,
 						d.apellidos,
 						d.usuario as nresponsable,
-						sum(if(e.actividad_id is null, 0, 1)) comentarios", false)
+						sum(if(e.actividad_id is null, 0, 1)) comentarios,
+						if(c.responsable = {$userID}, 1, 0) editar
+						", false)
 					->from("atlas.actividad a")
 					->join("atlas.especifico b", "b.id = a.especifico_id")
 					->join("atlas.producto c", "c.id = b.producto_id")

@@ -60,6 +60,21 @@ class Conf_model extends CI_Model {
 		}
 	}
 
+	public function getAccion($args = [])
+	{
+		if (isset($args["id"])) {
+			$this->db->where("a.id", $args["id"]);
+		}
+
+		$tmp = $this->db->get("atlas.accion a");
+
+		if (isset($args["uno"])) {
+			return $tmp->row();
+		} else {
+			return $tmp->result();
+		}
+	}
+
 }
 
 /* End of file Seguimiento_model.php */

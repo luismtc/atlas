@@ -61,13 +61,25 @@ class Actividad extends CI_Controller {
 				$act = new Actividad_model();
 				$act->setActividad($actividad, true);
 
-				if ($datos->accion == 2 && $act->producto->responsable != $this->session->atlas_user["id"]) {
+				if ($datos->accion == 2 && !in_array($this->session->atlas_user["id"], [$act->producto->responsable, $act->actividad->responsable])) {
 					$res["mensaje"] = "No tiene permisos para realizar esta acción.";
 				} else {
 					$data = [];
 
-					if ($datos->accion == 2) {
-						$data["entrega"] = date('Y-m-d H:i:s');
+					switch ($datos->accion) {
+						case '2':
+							$data["entrega"] = date('Y-m-d H:i:s');
+							break;
+						case '3':
+							$data["retorno"] = 1;
+							break;
+						case '4':
+							$data["cerrada"] = 1;
+							break;
+						
+						default:
+							# code...
+							break;
 					}
 
 					if (count($data) > 0) {
@@ -80,22 +92,20 @@ class Actividad extends CI_Controller {
 						}
 					}
 
-					if ($datos->accion != 2) {
-						$dbit = [
-							"comentario" => $datos->comentario,
-							"accion_id" => $datos->accion
-						];
+					$dbit = [
+						"comentario" => $datos->comentario,
+						"accion_id" => $datos->accion
+					];
 
-						if (isset($datos->responde)) {
-							$dbit["responde"] = $datos->responde;
-						}
+					if (isset($datos->responde)) {
+						$dbit["responde"] = $datos->responde;
+					}
 
-						if ($act->setBitacora(["datos" => $dbit])) {
-							$res["bitacora"] = $act->getBitacora();
-							$res["exito"] = 1;
-						} else {
-							$res["mensaje"] = "Error, intente nuevamente.";
-						}
+					if ($act->setBitacora(["datos" => $dbit])) {
+						$res["bitacora"] = $act->getBitacora();
+						$res["exito"] = 1;
+					} else {
+						$res["mensaje"] = "Error, intente nuevamente.";
 					}
 				}
 			} else {

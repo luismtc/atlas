@@ -22,14 +22,14 @@
         <div class="col-sm-4">
           <select v-model="form.responsable" class="form-control" required="required" id="selectResponsable">
             <option value="">------</option>
-            <option v-for="item in listaUsuarios" v-bind:value="item.id">{{ item.nombre }} {{ item.apellidos }}</option>
+            <option v-for="item in catalogo.usuarios" v-bind:value="item.id">{{ item.nombre }} {{ item.apellidos }}</option>
           </select>
         </div>
         <label for="selectPropietario" class="col-sm-2 col-form-label">Propietario</label>
         <div class="col-sm-4">
           <select v-model="form.propietario" class="form-control" required="required" id="selectPropietario">
             <option value="">------</option>
-            <option v-for="item in listaUsuarios" v-bind:value="item.id">{{ item.nombre }} {{ item.apellidos }}</option>
+            <option v-for="item in catalogo.usuarios" v-bind:value="item.id">{{ item.nombre }} {{ item.apellidos }}</option>
           </select>
         </div>
       </div>

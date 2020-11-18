@@ -49,14 +49,14 @@ class Actividad_model extends Especifico_model {
 					"usuario" => $this->session->atlas_user["id"]
 				]);
 
-				if ($args->notificar) {
-					/*gcorreo([
+				/* if ($args->notificar) {
+					gcorreo([
 						"token" => $usu->google_token,
 						"para" => $this->getActividadResponsable()->correo,
 						"asunto" => "Asignación de actividad # {$this->producto->titulo}",
 						"cuerpo" => $this->load->view('atlas/actividad/notificar', ["act" => $this], true)
-					]);*/
-				}
+					]);
+				}*/
 
 				return true;
 			}
@@ -93,27 +93,23 @@ class Actividad_model extends Especifico_model {
 
 		$tmp = $this->db->affected_rows() > 0;
 
-		if ($tmp) {
-			if ($args["datos"]["accion_id"] == 1) {
-				if (!empty($this->producto->chat_webhook)) {
-					$usu = $this->conf->getUsuario([
-						"uno" => true,
-						"id" => $this->session->atlas_user["id"]
-					]);
+		/*if ($tmp && isset($args["datos"]["comentario"]) && !empty($this->producto->chat_webhook)) {
+			$usu = $this->conf->getUsuario([
+				"uno" => true,
+				"id" => $this->session->atlas_user["id"]
+			]);
 
-					$txt = ["text" => "{$usu->nombre} ha comentado: {$this->producto->titulo} > {$this->especifico->descripcion} > {$this->actividad->subtitulo}:\n" . $args["datos"]["comentario"]];
-					
-					$ch = curl_init();
-					curl_setopt($ch, CURLOPT_URL, $this->producto->chat_webhook);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-					curl_setopt($ch, CURLOPT_POST, 1);
-					curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($txt)); 
-					curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/plain')); 
-					curl_exec($ch);
-					curl_close($ch);
-				}
-			}
-		}
+			$txt = ["text" => "{$usu->nombre} ha comentado: {$this->producto->titulo} > {$this->especifico->descripcion} > {$this->actividad->subtitulo}:\n" . $args["datos"]["comentario"]];
+			
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $this->producto->chat_webhook);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($txt)); 
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/plain')); 
+			curl_exec($ch);
+			curl_close($ch);
+		}*/
 
 		return $tmp;
 	}

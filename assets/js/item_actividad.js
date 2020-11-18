@@ -12,6 +12,10 @@ let appFormActividad = {
     act: {
       type: Object,
       required: false
+    },
+    catalogo: {
+      type: Object,
+      required: true
     }
   },
   template: '#form-actividad',
@@ -25,12 +29,10 @@ let appFormActividad = {
         responsable: null,
         compromiso: null,
         horas: 1,
-        descripcion: null,
-        notificar: false
+        descripcion: null
       },
       fagregar: false,
       btnGuardar: false,
-      listaUsuarios: null,
       toolbar: {
         'font-styles': false,
         'emphasis': true,
@@ -49,12 +51,6 @@ let appFormActividad = {
         }
       }
     }
-
-    axios
-    .get(urlBase + 'conf/get_usuarios')
-    .then(response => {
-      this.listaUsuarios = response.data.usuarios;
-    });
   },
   methods: {
     guardarActividad: function(e) {
@@ -92,7 +88,20 @@ let appFormActividad = {
 }
 
 let appActividadLista = {
-  props: ['act', 'detalle'],
+  props: {
+    act: {
+      type: Object,
+      required: false
+    },
+    detalle: {
+      type: Boolean,
+      required: true
+    },
+    catalogo: {
+      type: Object,
+      required: true
+    }
+  },
   template: '#lista-actividad',
   data: function() {
     return {
@@ -100,7 +109,7 @@ let appActividadLista = {
       formActividad: false,
       form: {
         comentario:null,
-        accion:null,
+        accion: 1,
         responde:null
       },
       formComentario: false,
@@ -125,56 +134,41 @@ let appActividadLista = {
       this.formComentario = !this.formComentario;
       this.form.responde = this.formComentario ? b : null;
     },
-    actBitacora: function(accion) {
-      this.form.accion = accion;
-      let seguir = true;
+    actBitacora: function() {
+      this.formComentario = false;
+      this.ecom = true;
 
-      if (accion == 2) {
-        seguir = confirm('¿Seguro?');
-      }
+      axios
+      .post(this.ruta+'/set_bitacora/'+this.act.actividad, this.form)
+      .then(r => {
+        let en = r.headers['content-type'].split(';')
 
-      if (seguir) {
-        this.formComentario = false;
-        this.ecom = true;
+        if (en[0] == 'application/json') {
+          if (r.data.exito == 1) {
+            this.form.comentario = null;
+            this.form.accion = 1;
+            this.form.responde = null;
 
-        axios
-        .post(this.ruta+'/set_bitacora/'+this.act.actividad, this.form)
-        .then(r => {
-          let en = r.headers['content-type'].split(';')
-
-          if (en[0] == 'application/json') {
-            if (r.data.exito == 1) {
-              this.form.comentario = null;
-              this.form.accion = null;
-              this.form.responde = null;
-
-              if (r.data.bitacora) {
-                this.listaBitacora = r.data.bitacora;
-                this.bcantidad = this.listaBitacora.length;
-              }
-              
-              if (r.data.entrega) {
-                this.act.entrega = r.data.entrega;
-                this.act.cumple =  r.data.cumple;
-              }
-
-              if (accion == 1) { this.verComentarios = true; }
-            } else {
-              alert(r.data.mensaje);
-              
-              if (accion == 2) {
-                this.form.comentario = null;
-              }
+            if (r.data.bitacora) {
+              this.listaBitacora = r.data.bitacora;
+              this.bcantidad = this.listaBitacora.length;
             }
-          } else {
-            alert('Sesión caducada');
-          }
+            
+            if (r.data.entrega) {
+              this.act.entrega = r.data.entrega;
+              this.act.cumple =  r.data.cumple;
+            }
 
-          this.ecom = false;
-        });
-      } else {
-        this.form.comentario = null;
-      }
+            this.verComentarios = true;
+          } else {
+            alert(r.data.mensaje);
+          }
+        } else {
+          alert('Sesión caducada');
+        }
+
+        this.ecom = false;
+      });
     },
     getProyecto: function() {
       axios
@@ -189,6 +183,11 @@ let appActividadLista = {
       return this.listaBitacora.filter(ob => {
         return ob.responde == null;
       });
+    },
+    acciones () {
+      return this.catalogo.acciones.filter(obj => {
+        return this.act.editar == 1 ? true : obj.editar == 0
+      })
     }
   },
   watch: {

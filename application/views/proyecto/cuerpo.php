@@ -53,12 +53,21 @@
 
         <?php $this->load->view('proyecto/form_bform'); ?>
 
-        <form-proyecto v-if="actual == 4"></form-proyecto>
+        <form-proyecto v-if="actual == 4" :catalogo="catalogo"></form-proyecto>
       </div>
     </div>
-    <ver-proyecto v-if="actual == 3" :proyecto="proyecto" v-on:regresar="retorno"></ver-proyecto>
+    <ver-proyecto 
+      v-if="actual == 3" 
+      :proyecto="proyecto" 
+      :catalogo="catalogo"
+      v-on:regresar="retorno"
+    ></ver-proyecto>
     <keep-alive>
-      <indicador v-if="actual == 5" v-on:regresar="retorno"></indicador>
+      <indicador 
+        v-if="actual == 5" 
+        :catalogo="catalogo"
+        v-on:regresar="retorno"
+      ></indicador>
     </keep-alive>
   </main>
 </div>

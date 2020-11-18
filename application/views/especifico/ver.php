@@ -27,12 +27,16 @@
 		</div>
 	</li>
 	<li class="list-group-item" v-if="formActividad">
-		<actividad-form :especifico="esp.especifico"></actividad-form>
+		<actividad-form 
+			:especifico="esp.especifico"
+			:catalogo="catalogo"
+		></actividad-form>
 	</li>
 	<actividad-item
 		v-for="(i, index) in actividades"
 		:act="i"
 		:detalle="false"
+		:catalogo="catalogo"
 		:key="i.actividad"
 	></actividad-item>
 </ul>

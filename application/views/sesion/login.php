@@ -11,7 +11,7 @@
 <link rel="manifest" href="<?php echo base_url('manifest.json') ?>">
 <link rel="apple-touch-icon" href="<?php echo base_url('assets/img/icons/128x128.png') ?>">
 <!-- Bootstrap CSS -->
-<link rel="stylesheet" href="<?php echo base_url('assets/node_modules/bootstrap/dist/css/bootstrap.min.css') ?>">
+<link rel="stylesheet" href="<?php echo base_url('assets/bootstrap-4.5.3-dist/css/bootstrap.min.css') ?>">
 </head>
 <body>
 <div class="container-fluid">

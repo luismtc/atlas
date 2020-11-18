@@ -54,6 +54,7 @@
   <filtro-actividades 
     :actividades="actividades" 
     :detalle="true"
+    :catalogo="catalogo"
     v-on:proyecto="verProyecto"
   ></filtro-actividades>
 </template>

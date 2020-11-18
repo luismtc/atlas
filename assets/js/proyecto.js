@@ -1,6 +1,7 @@
 var appProyecto = new Vue({
   el: '#contenidoProyecto',
   data: {
+    catalogo: {},
     form: {
       titulo: null,
       pendientes: true
@@ -60,7 +61,11 @@ var appProyecto = new Vue({
     }
   },
   created () {
-    this.verPendientes();
+    axios
+    .get(urlBase+'conf/get_catalogo')
+    .then(response => {
+      this.catalogo = response.data;
+    });
   },
   components: {
     'ver-proyecto': appVerProyecto,

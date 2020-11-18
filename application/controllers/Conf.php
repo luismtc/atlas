@@ -17,6 +17,16 @@ class Conf extends CI_Controller {
 		]));
 	}
 
+	public function get_catalogo()
+	{
+		$this->output
+		->set_content_type("application/json")
+		->set_output(json_encode([
+			"usuarios" => $this->conf->getUsuario(["activo" => 1]),
+			"acciones" => $this->conf->getAccion()
+		]));
+	}
+
 }
 
 /* End of file Conf.php */

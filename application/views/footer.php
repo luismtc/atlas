@@ -1,13 +1,11 @@
-<script src="<?php echo base_url('assets/node_modules/jquery/dist/jquery.min.js') ?>"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<!-- script src="<?php echo base_url('assets/node_modules/@popperjs/core/dist/umd/popper.min.js') ?>"></script -->
-<script src="<?php echo base_url('assets/node_modules/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script src="<?php echo base_url('assets/node_modules/axios/dist/axios.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/jquery-3.5.1.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/popper.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/bootstrap-4.5.3-dist/js/bootstrap.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/axios.min.js') ?>"></script>
 <?php if (ENVIRONMENT === 'development'): ?>
-  <script src="<?php echo base_url('assets/node_modules/vue/dist/vue.js') ?>"></script>
+  <script src="<?php echo base_url('assets/js/vue.js') ?>"></script>
 <?php else: ?>
-  <script src="<?php echo base_url('assets/node_modules/vue/dist/vue.min.js') ?>"></script>
+  <script src="<?php echo base_url('assets/js/vue.min.js') ?>"></script>
 <?php endif ?>
 
 <script type="text/javascript">

@@ -3,7 +3,8 @@ let filtrosActividades = {
 		return {
 			responsables: [],
 			semanas: [],
-			dias: []
+			dias: [],
+			proyectos: []
 		}
 	},
 	created: function() {
@@ -28,6 +29,14 @@ let filtrosActividades = {
 				}
 
 				this.semanas.sort(function(a, b){return a - b});
+
+				let p = this.actividades[i].titulo;
+
+				if (!this.proyectos.includes(p)) {
+					this.proyectos.push(p);
+				}
+
+				this.proyectos.sort(function(a, b){return a - b});
 			}
 		}
 	}

@@ -1,95 +1,146 @@
 <template id="lista-actividad">
 <li class="list-group-item">
-	<actividad-form :act="act" v-if="formActividad"></actividad-form>
-	<div class="row">
-		<div class="col-sm-7">
-			<strong>{{ act.nombre }} {{ act.apellidos }}</strong> 
-			<small class="text-muted">{{ act.compromiso }}</small>
-			<span 
-				class="font-weight-bold"
-				:style="{color:act.cuando==1?'#187a91':'#d81717'}" 
-				v-if="act.cuando < 3 && act.entrega === null"
-			>{{ act.cuando==1?'VIVO VIVO':'VAS TARDE' }}</span>
+	<actividad-form
+		v-if="formActividad" 
+		:act="act" 
+		:catalogo="catalogo"
+	></actividad-form>
+	<div v-else>
+		<div class="row">
+			<div class="col-sm-7">
+				<strong>{{ act.nombre }} {{ act.apellidos }}</strong> 
+				<small class="text-muted">{{ act.compromiso }}</small>
+				<span 
+					class="font-weight-bold"
+					:style="{color:act.cuando==1?'#187a91':'#d81717'}" 
+					v-if="act.cuando < 3 && act.entrega === null"
+				>{{ act.cuando==1?'VIVO VIVO':'VAS TARDE' }}</span>
+			</div>
+			<div class="col-sm-5 text-right">
+				<a 
+					href="javascript:;" 
+					class="text-muted" 
+					v-if="act.editar == 1"
+					@click.prevent="formActividad = !formActividad"
+					aria-label="Editar actividad"
+				>
+					<i class="fa fa-edit"></i>
+				</a>
+				<span 
+					:style="{color:act.cumple==1?'#2bcc98':'red'}" 
+					v-else
+				>{{ act.entrega !== null ? 'Entregada':'' }}</span>
+			</div>
 		</div>
-		<div class="col-sm-5 text-right">
-			<span 
-				:style="{color:act.cumple==1?'#2bcc98':'red'}" 
-				v-if="act.entrega !== null">Entregada</span>
+		<div>
+			<p class="mb-0"><strong>{{ act.subtitulo }}</strong>:</p>
+			<p v-html="act.descripcion"></p>	
+		</div>
+		<div class="row">
+			<div class="col">
+				<a 
+					href="javascript:;" 
+					v-if="detalle == true"
+					style="color: #0972e3;" 
+					title="Título del proyecto" 
+					@click.prevent="getProyecto"
+				>{{ act.titulo }}</a>
+				<small title="Título del proyecto" v-else>{{ act.titulo }}</small> 
+				<span class="fa fa-arrow-right"></span> 
+				<small title="Específico">{{ act.nespecifico }}</small>
+			</div>
+			<div class="col text-right">
+				<span 
+					class="badge badge-danger" 
+					v-if="act.retorno == 1"
+				>Retorno</span>
+				<span 
+					class="badge badge-success" 
+					v-if="act.cerrada == 1"
+				>Cerrada</span>
+			</div>
+		</div>
+		<div>
+			<button 
+				type="button" 
+				class="btn btn-sm btn-outline-info rounded-circle" 
+				:class="{active: formComentario}"
+				v-if="act.entrega === null || (act.editar == 1 && act.cerrada == 0)"
+				aria-label="Comentar"
+				@click="formComentario = !formComentario">
+				<i class="far fa-comment" aria-hidden="true"></i>
+			</button>
+			<span class="text-muted" v-if="act.entrega !== null">{{ act.entrega }} (Entrega)</span>
 			<a 
 				href="javascript:;" 
-				class="text-muted" 
-				v-if="act.entrega === null"
-				@click.prevent="formActividad = !formActividad"
-				aria-label="Editar actividad"
+				class="pull-right text-muted" 
+				@click.prevent="verComentarios = !verComentarios"
 			>
-				<i class="fa fa-edit"></i>
+				{{ act.comentarios }} comentarios
 			</a>
 		</div>
-	</div>
-	<div>
-		<p class="mb-0"><strong>{{ act.subtitulo }}</strong>:</p>
-		<p v-html="act.descripcion"></p>	
-	</div>
-	<div v-if="detalle == true">
-		<a 
-			href="javascript:;" 
-			style="color: #0972e3;" 
-			title="Título del proyecto" 
-			@click.prevent="getProyecto">{{ act.titulo }}</a>
-		<small title="Específico">{{ act.nespecifico }}</small>
-	</div>
-	<div v-else>
-		<small title="Título del proyecto">{{ act.titulo }}</small> 
-		<span class="fa fa-arrow-right"></span> 
-		<small title="Específico">{{ act.nespecifico }}</small>
-	</div>
-	<div>
-		<button 
-			type="button" 
-			class="btn btn-sm btn-outline-info rounded-circle" 
-			:class="{active: formComentario}"
-			v-if="act.entrega === null"
-			aria-label="Comentar"
-			@click="formComentario = !formComentario">
-			<i class="far fa-comment" aria-hidden="true"></i>
-		</button>
-		<button 
-			type="button" 
-			class="btn btn-sm btn-outline-dark rounded-circle" 
-			v-if="act.entrega === null"
-			aria-label="Entregar"
-			@click="actBitacora(2, this)">
-			<i class="fa fa-check" v-if="!ecom"></i>
-			<span 
-				class="spinner-border spinner-border-sm" 
-				role="status" 
-				v-if="ecom"
-				aria-hidden="true"></span>
-			<span class="sr-only" v-if="ecom">Loading...</span>
-		</button>
-		<span class="text-muted" v-if="act.entrega !== null">{{ act.entrega }} (Entrega)</span>
-		<a href="javascript:;" class="pull-right text-muted" @click.prevent="verComentarios = !verComentarios">
-			{{ act.comentarios }} comentarios
-		</a>
-	</div>
-	<div v-if="verComentarios" class="mt-2 p-2">
-		<comentario 
-			v-for="(i, index) in listaBitacora" 
-			:com="i" 
-			:key="i.id"
-			v-on:comentar="responder"
-			:index="index">
-		</comentario>
-	</div>
-	<div v-if="formComentario" class="mt-2">
-		<form @submit.prevent="actBitacora(1)">
-			<input
-				type="text"
-				style="background-color: #525252; color: #1cdede;"
-				class="form-control form-control-mono"
-				v-model="form.comentario"
-				placeholder="Enter para enviar comentario">
-		</form>
+		<div v-if="formComentario || verComentarios" class="mt-3 card bg-light">
+			<form 
+				@submit.prevent="actBitacora" 
+				class="card-body p-2"
+				v-if="formComentario"
+			>
+				<div class="form-group mb-1">
+					<input 
+						type="text" 
+						style="background-color: #525252; color: #1cdede;"
+						v-model="form.comentario"
+						class="form-control form-control-mono form-control-lg" 
+						aria-label="Texto para comentario"
+						placeholder="Comentario"
+					>
+				</div>
+
+				<div class="form-group mb-0">
+					<div class="input-group">
+						<select 
+							class="custom-select" 
+							v-model="form.accion" 
+							:required="true"
+						>
+							<option 
+								v-for="i in acciones" 
+								:value="i.id"
+							>{{ i.descripcion }}</option>
+						</select>
+						<div class="input-group-append">
+							<button 
+								class="btn btn-outline-secondary" 
+								type="submit" 
+								id="button-addon2"
+							><i class="far fa-paper-plane"></i> Enviar</button>
+						</div>
+					</div>
+				</div>
+			</form>
+			<div 
+				class="card-body" 
+				v-if="formComentario && form.comentario !== null" 
+				v-html="form.comentario"
+			></div>
+			<ul class="list-group list-group-flush">
+				<li 
+					class="list-group-item"
+					v-for="(i, index) in listaBitacora" 
+					:key="i.id"
+				>
+					<div class="row">
+						<div class="col-sm-8">
+							<strong>{{ i.nombre }} {{ i.apellidos }}</strong> <small><span class="text-muted">{{ i.fecha }}</span></small>
+						</div>
+						<div class="col-sm-4 text-right">
+							<span class="badge badge-secondary">{{ i.naccion }}</span>
+						</div>
+					</div>
+					<p class="mb-0">{{ i.comentario }}</p>
+				</li>
+			</ul>
+		</div>
 	</div>
 </li>
 </template>

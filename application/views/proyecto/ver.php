@@ -70,10 +70,17 @@
           <div class="card-body" v-html="proyecto.descripcion"></div>
         </div>
         <div v-if="opcion == 2">
-          <especifico-ver :esp="actualEspecifico"><especifico-ver>
+          <especifico-ver 
+            :esp="actualEspecifico"
+            :catalogo="catalogo"
+          ><especifico-ver>
         </div>
         <template v-if="opcion == 3 && actividades.length > 0">
-          <filtro-actividades :actividades="actividades" :detalle="false"></filtro-actividades>
+          <filtro-actividades 
+            :actividades="actividades" 
+            :detalle="false"
+            :catalogo="catalogo"
+          ></filtro-actividades>
         </template>
       </div>
     </div>

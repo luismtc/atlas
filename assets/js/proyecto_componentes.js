@@ -1,5 +1,11 @@
 let appFormProyecto = {
   template: '#form-proyecto',
+  props: {
+    catalogo: {
+      type: Object,
+      required: true
+    }
+  },
   data: function() {
     return {
       form: {
@@ -7,16 +13,8 @@ let appFormProyecto = {
         descripcion:null,
         responsable:null,
         propietario:null
-      },
-      listaUsuarios: null
+      }
     }
-  },
-  created: function() {
-    axios
-    .get(urlBase + 'conf/get_usuarios')
-    .then(response => {
-      this.listaUsuarios = response.data.usuarios;
-    });
   },
   methods: {
     guardarProyecto: function() {
@@ -37,7 +35,16 @@ let appFormProyecto = {
 
 let especifico = {
   template: '#especifico-ver',
-  props: { esp: Object },
+  props: { 
+    esp: {
+      type: Object,
+      required: true
+    },
+    catalogo: {
+      type: Object,
+      required: true
+    }
+  },
   data: function() {
     return {
       formActividad: false,
@@ -83,7 +90,16 @@ let especifico = {
 }
 
 let appVerProyecto = {
-  props: ['proyecto'],
+  props: {
+    proyecto: {
+      type: Object,
+      required: true
+    },
+    catalogo: {
+      type: Object,
+      required: true
+    }
+  },
   template: '#ver-proyecto',
   data: function() {
     return {
@@ -165,53 +181,99 @@ let appVerProyecto = {
 
 let indicador = {
   template: '#ver-indicador',
+  props: {
+    catalogo: {
+      type: Object,
+      required: true
+    }
+  },
+  mixins: [filtrosActividades],
   data: function() {
     return {
+      tipoResumen: '',
+      verActividad: false,
+      actual: {},
       form: {
         ifdel: null,
         ifal: null
       },
-      actividades: []
+      filtro: {
+        proyecto: []
+      },
+      actividades: [],
+      buscando: false
     }
   },
   methods: {
     buscar: function() {
+      this.buscando = true;
+      this.actividades = [];
+      this.proyectos = [];
+
       axios
       .get(urlBase + 'indicador/buscar', {params:this.form})
       .then(r => {
         this.actividades = r.data.actividades;
-        google.charts.setOnLoadCallback(this.cumplimiento);
+        this.cargarFiltros();
+        this.filtro.proyecto = [...this.proyectos];
+        this.buscando = false;
       })
-    },
-    cumplimiento: function() {
-      let total = this.actividades.length;
-      let hechos = this.actividades.filter(o => { 
-        return ( o.entrega !== null )
-      }).length;
-      let cumplen = this.actividades.filter(o => { 
-        return ( o.cumple == 1 )
-      }).length;
-
-      var data = google.visualization.arrayToDataTable([
-        ['Label', 'Value'],
-        ['Proyectos', parseInt((hechos / total)*100)],
-        ['Iteración', parseInt((cumplen / hechos)*100)]
-      ]);
-
-      var options = {
-        width: 800, height: 200,
-        redFrom: 0, redTo: 89,
-        yellowFrom:90, yellowTo: 94,
-        greenFrom: 95, greenTo: 100,
-        minorTicks: 5
-      };
-
-      var chart = new google.visualization.Gauge(document.getElementById('graficas'));
-
-      chart.draw(data, options);
+      .catch(e => {
+        alert(e);
+        this.buscando = false;
+      })
     }
   },
-  created: function() {
-    google.charts.load('current', {packages: ['corechart', 'gauge']});
+  computed: {
+    lista () {
+      return this.actividades.filter(obj => {
+        return this.filtro.proyecto.includes(obj.titulo);
+      });
+    },
+    graficas () {
+      if (this.lista.length) {
+        let total = this.lista.length;
+        let hechos = this.lista.filter(o => { 
+          return ( o.entrega !== null )
+        }).length;
+        let cumplen = this.lista.filter(o => { 
+          return ( o.cumple == 1 )
+        }).length;
+        let retorno = this.lista.filter(o => { 
+          return ( o.retorno == 1 )
+        }).length;
+        let cerrada = this.lista.filter(o => { 
+          return ( o.cerrada == 1 )
+        }).length;
+
+        return [
+          {nombre:'Proyectos', porcentaje: parseInt((hechos / total)*100)},
+          {nombre:'Iteración', porcentaje: parseInt((cumplen / hechos)*100)},
+          {nombre:'Retornos', porcentaje: parseInt((retorno / hechos)*100)},
+          {nombre:'Cerradas', porcentaje: parseInt((cerrada / hechos)*100)},
+        ];
+      } else {
+        return [];
+      }
+    },
+    listaResumen () {
+      return this.lista.filter(obj => {
+        switch (this.tipoResumen) {
+          case 'Proyectos':
+            return obj.entrega === null;
+          case 'Iteración':
+            return obj.cumple == 0;
+          case 'Retornos':
+            return obj.retorno == 1;
+          case 'Cerradas':
+            return obj.cerrada == 0;
+          default:
+            return false;
+        }
+      })
+    }
+  },
+  components: {
+    'actividad-item': appActividadLista
   }
 }

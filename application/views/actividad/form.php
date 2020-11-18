@@ -4,10 +4,10 @@
     <div class="offset-sm-2 col-sm-10">
       <button 
         type="button" 
-        class="btn btn-sm btn-secondary" 
+        class="btn btn-sm btn-secondary mb-2" 
         @click="previa = !previa"
       >
-        <i class="fa fa-arrow-left"></i> Cancelar
+        <i class="fa fa-arrow-left"></i> Regresar
       </button>
       <div v-html="form.descripcion"></div>
     </div>
@@ -23,7 +23,7 @@
       <label for="selectResponsableActividad" class="col-sm-2 col-form-label">Responsable</label>
       <div class="col-sm-10">
         <select v-model="form.responsable" class="form-control form-control-sm" id="selectResponsableActividad">
-          <option v-for="item in listaUsuarios" v-bind:value="item.id">{{ item.nombre }} {{ item.apellidos }}</option>
+          <option v-for="item in catalogo.usuarios" v-bind:value="item.id">{{ item.nombre }} {{ item.apellidos }}</option>
         </select>
       </div>
     </div>
@@ -40,22 +40,16 @@
     <div class="form-group row mb-2">
       <div class="offset-sm-2 col-sm-10">
         <textarea 
-          v-model="form.descripcion" 
-          style="background-color: #525252; color: #1cdede;"
+          rows="3" 
           class="form-control form-control-sm form-control-mono" 
-          rows="3"></textarea>
+          v-model="form.descripcion"
+          style="background-color: rgb(82, 82, 82); color: rgb(28, 222, 222);"
+        ></textarea>
       </div>
     </div>
+
     <div class="form-group row mb-1">
-      <div class="offset-sm-2 col-sm-4">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="checkNotificar" v-model="form.notificar">
-          <label class="form-check-label" for="checkNotificar">
-            Notificar
-          </label>
-        </div>
-      </div>
-      <div class="col-sm-6 text-right">
+      <div class="col-sm-12 text-right">
         <button type="button" class="btn btn-sm btn-secondary" @click="previa = !previa">
           <i class="fa fa-refresh"></i> Previa
         </button>
