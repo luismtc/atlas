@@ -234,22 +234,22 @@ let indicador = {
       if (this.lista.length) {
         let total = this.lista.length;
         let hechos = this.lista.filter(o => { 
-          return ( o.entrega !== null )
+          return o.entrega !== null;
         }).length;
         let cumplen = this.lista.filter(o => { 
-          return ( o.cumple == 1 )
+          return o.cumple == 1;
         }).length;
         let retorno = this.lista.filter(o => { 
-          return ( o.retorno == 1 )
+          return o.retorno == 0 && o.entrega !== null;
         }).length;
         let cerrada = this.lista.filter(o => { 
-          return ( o.cerrada == 1 )
+          return o.cerrada == 1 && o.entrega !== null;
         }).length;
 
         return [
           {nombre:'Proyectos', porcentaje: parseInt((hechos / total)*100)},
           {nombre:'Iteración', porcentaje: parseInt((cumplen / hechos)*100)},
-          {nombre:'Retornos', porcentaje: parseInt((retorno / hechos)*100)},
+          {nombre:'Satisfacción', porcentaje: parseInt((retorno / hechos)*100)},
           {nombre:'Cerradas', porcentaje: parseInt((cerrada / hechos)*100)},
         ];
       } else {
@@ -263,10 +263,10 @@ let indicador = {
             return obj.entrega === null;
           case 'Iteración':
             return obj.cumple == 0;
-          case 'Retornos':
-            return obj.retorno == 1;
+          case 'Satisfacción':
+            return obj.retorno == 1 && obj.entrega !== null;
           case 'Cerradas':
-            return obj.cerrada == 0;
+            return obj.cerrada == 0 && obj.entrega !== null;
           default:
             return false;
         }

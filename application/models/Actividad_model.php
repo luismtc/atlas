@@ -93,7 +93,7 @@ class Actividad_model extends Especifico_model {
 
 		$tmp = $this->db->affected_rows() > 0;
 
-		/*if ($tmp && isset($args["datos"]["comentario"]) && !empty($this->producto->chat_webhook)) {
+		if ($tmp && $args["datos"]["accion_id"] < 4 && !empty($this->producto->chat_webhook)) {
 			$usu = $this->conf->getUsuario([
 				"uno" => true,
 				"id" => $this->session->atlas_user["id"]
@@ -109,7 +109,7 @@ class Actividad_model extends Especifico_model {
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/plain')); 
 			curl_exec($ch);
 			curl_close($ch);
-		}*/
+		}
 
 		return $tmp;
 	}

@@ -86,6 +86,9 @@ class Actividad extends CI_Controller {
 						if ($act->guardarActividad($data)) {
 							$res["entrega"] = $act->actividad->entrega;
 							$res["cumple"] = $act->actividad->cumple;
+							$res["retorno"] = $act->actividad->retorno;
+							$res["cerrada"] = $act->actividad->cerrada;
+							
 							$res["exito"] = 1;
 						} else {
 							$res["mensaje"] = "Error al guardar.";

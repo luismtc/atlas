@@ -18,6 +18,12 @@
         </div>
       </div>
       <div class="form-group row">
+        <label for="inputWebhook" class="col-sm-2 col-form-label">Webhook</label>
+        <div class="col-sm-10">
+          <input type="text" v-model="form.chat_webhook" class="form-control" id="inputWebhook">
+        </div>
+      </div>
+      <div class="form-group row">
         <label for="selectResponsable" class="col-sm-2 col-form-label">Responsable</label>
         <div class="col-sm-4">
           <select v-model="form.responsable" class="form-control" required="required" id="selectResponsable">

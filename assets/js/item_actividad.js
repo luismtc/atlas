@@ -157,6 +157,8 @@ let appActividadLista = {
             if (r.data.entrega) {
               this.act.entrega = r.data.entrega;
               this.act.cumple =  r.data.cumple;
+              this.act.retorno =  r.data.retorno;
+              this.act.cerrada =  r.data.cerrada;
             }
 
             this.verComentarios = true;
