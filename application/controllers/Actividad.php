@@ -23,16 +23,16 @@ class Actividad extends CI_Controller {
 			$act->setActividad($codigo, true);
 		}
 
-		if ($act->producto->usuario == $this->session->atlas_user["id"]) {
+		#if ($act->producto->usuario == $this->session->atlas_user["id"]) {
 			if ($act->guardarActividad($datos)) {
 				$data["exito"] = 1;
 				$data["actividad"] = $act->getActividad();
 			} else {
 				$data["mensaje"] = "Error.";
 			}
-		} else {
+		/*} else {
 			$data["mensaje"] = "¿Qué hacés?";
-		}	
+		}*/	
 
 		$this->output
 			 ->set_content_type("application/json")
@@ -72,6 +72,17 @@ class Actividad extends CI_Controller {
 							break;
 						case '3':
 							$data["retorno"] = 1;
+
+							$tmp = new stdClass();
+							$tmp->subtitulo = 'RETORNO: ' . $act->actividad->subtitulo;
+							$tmp->responsable = $act->actividad->responsable;
+							$tmp->compromiso = date('Y-m-d');
+							$tmp->descripcion = $datos->comentario;
+
+							$tmpActividad = new Actividad_model();
+							$tmpActividad->setEspecifico($act->especifico->id);
+							$tmpActividad->guardarActividad($tmp);
+
 							break;
 						case '4':
 							$data["cerrada"] = 1;

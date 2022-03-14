@@ -78,9 +78,9 @@ class Actividad_model extends Especifico_model {
 
 	public function getActividadResponsable()
 	{
-		return $this->conf->get_usuario([
+		return $this->conf->getUsuario([
 			"uno" => true,
-			"usuario" => $this->actividad->responsable
+			"id" => $this->actividad->responsable
 		]);
 	}
 

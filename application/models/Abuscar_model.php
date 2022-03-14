@@ -73,15 +73,14 @@ class Abuscar_model extends CI_Model {
 						d.apellidos,
 						d.usuario as nresponsable,
 						sum(if(e.actividad_id is null, 0, 1)) comentarios,
-						if(c.responsable = {$userID}, 1, 0) editar
-						", false)
+						if(c.responsable = {$userID} or a.responsable = {$userID}, 1, 0) editar", false)
 					->from("atlas.actividad a")
 					->join("atlas.especifico b", "b.id = a.especifico_id")
 					->join("atlas.producto c", "c.id = b.producto_id")
 					->join("atlas.usuario d", "d.id = a.responsable", "left")
 					->join("atlas.bitacora e", "e.actividad_id = a.id", "left")
-					->order_by("b.descripcion", "ASC")
 					->order_by("a.compromiso", "ASC")
+					->order_by("b.descripcion", "ASC")
 					->group_by("a.id")
 					->get();
 		
